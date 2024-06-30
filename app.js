@@ -8,6 +8,7 @@ const Listing = require("./models/listing.js");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({extended: true}));
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 main()
@@ -31,11 +32,24 @@ app.get("/", (req, res) => {
 app.get("/listings", (req, res) => {
   Listing.find({})
     .then((allListings) => {
-      res.render("listings/index.ejs", {allListings});
+      res.render("listings/index.ejs", { allListings });
     })
     .catch((err) => console.log(err));
 });
 
+// ----------------------------
+// Show Route
+// ----------------------------
+app.get("/listings/:id", (req, res) => {
+  const { id } = req.params;
+  Listing.findById(id)
+    .then((listing) => {
+      res.render("listings/show.ejs", {listing});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 // ----------------------------
 // Just for Testing Purpose
 // ----------------------------
