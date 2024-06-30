@@ -134,6 +134,32 @@ app.put("/listings/:id", (req, res) => {
 //   res.redirect(`/listings/${id}`);
 // });
 
+// -------------------------------
+// Delete Route
+// -------------------------------
+app.delete("/listings/:id", (req, res) => {
+  const { id } = req.params;
+  Listing.findByIdAndDelete(id)
+    .then((deletedListing) => {
+      console.log("Listing Deleted");
+      console.log(deletedListing);
+      res.redirect("/listings");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+// -------------------------------
+// Delete Route - Sraddha Version
+// -------------------------------
+// app.delete("/listings/:id", async (req, res) => {
+//   const { id } = req.params;
+//   const deletedListing = await Listing.findByIdAndDelete(id);
+//   console.log(deletedListing);
+//   res.redirect("/listings");
+// });
+
 // ----------------------------
 // Just for Testing Purpose
 // ----------------------------
