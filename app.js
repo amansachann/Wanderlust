@@ -25,21 +25,35 @@ app.get("/", (req, res) => {
   res.send("Hi, I am root...");
 });
 
-app.get("/testListing", (req, res) => {
-  const sampleListing = new Listing({
-    title: "Beautiful Beach House",
-    description: "A lovely beach house with stunning ocean views and modern amenities.",
-    price: 350000,
-    location: "Madgaon, Goa",
-    country: "India",
-  });
-
-  sampleListing.save().then((result)=>{
-    console.log(result);
-    console.log("Sample was saved");
-    res.send("Successful testing"); 
-  }); 
+// ----------------------------
+// Index Route
+// ----------------------------
+app.get("/listings", (req, res) => {
+  Listing.find({})
+    .then((allListings) => {
+      res.render("listings/index.ejs", {allListings});
+    })
+    .catch((err) => console.log(err));
 });
+
+// ----------------------------
+// Just for Testing Purpose
+// ----------------------------
+// app.get("/testListing", (req, res) => {
+//   const sampleListing = new Listing({
+//     title: "Beautiful Beach House",
+//     description: "A lovely beach house with stunning ocean views and modern amenities.",
+//     price: 350000,
+//     location: "Madgaon, Goa",
+//     country: "India",
+//   });
+
+//   sampleListing.save().then((result)=>{
+//     console.log(result);
+//     console.log("Sample was saved");
+//     res.send("Successful testing");
+//   });
+// });
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
