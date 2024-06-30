@@ -1,25 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= listing.title %></title>
-  </head>
-  <body>
-    <h3>Listing Details</h3>
-    <ul>
-      <li><%= listing.title %></li>
-      <li><%= listing.description %></li>
-      <li>&#8377; <%= listing.price.toLocaleString("en-IN") %></li>
-      <li><%= listing.location %></li>
-      <li><%= listing.country %></li>
-    </ul>
+<% layout("layouts/boilerplate.ejs") %>
+<body>
+  <h3>Listing Details</h3>
+  <ul>
+    <li><%= listing.title %></li>
+    <li><%= listing.description %></li>
+    <li>&#8377; <%= listing.price.toLocaleString("en-IN") %></li>
+    <li><%= listing.location %></li>
+    <li><%= listing.country %></li>
+  </ul>
 
-    <a href="/listings/<%= listing._id %>/edit"
-      ><button>Edit this Listing</button></a
-    ><br /><br />
-    <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
-      <button>Delete this Listing</button>
-    </form>
-  </body>
-</html>
+  <a href="/listings/<%= listing._id %>/edit"
+    ><button>Edit this Listing</button></a
+  ><br /><br />
+  <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
+    <button>Delete this Listing</button>
+  </form>
+</body>
