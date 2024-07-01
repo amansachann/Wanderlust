@@ -1,14 +1,56 @@
+:root {
+    --color-primary-red: #fe424d;
+    --color-primary-dark: #222222;
+    --color-primary-light: #fff;
+    --color-secondary-light: #ebebeb;
+}
+
 /* Navbar */
 .navbar {
     height: 5rem;
-    background-color: white;
+    background-color: var(--color-primary-light);
 }
 
 .fa-compass {
-    color: #fe424d;
+    color: var(--color-primary-red);
     font-size: 2rem ;
 }
 
 .nav-link {
-    color: #222222 !important;
+    color: var(--color-primary-dark) !important;
+}
+
+/* Footer */
+.f-info-links a{
+    text-decoration: none;
+    color: var(--color-primary-dark);
+    margin-right: .5rem;
+}
+
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+
+.f-info-links, .f-info-socials, .f-info-brand {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.f-info-socials i {
+    font-size: 1.2rem;
+    margin-right: .75rem;
+    color: var(--color-primary-dark);
+}
+
+.f-info {
+    text-align: center;
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-evenly;
+    height: 8rem;
+    background-color: var(--color-secondary-light);
 }
