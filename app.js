@@ -6,6 +6,7 @@ const path = require("path");
 const Listing = require("./models/listing.js");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync.js")
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -86,15 +87,11 @@ app.get("/listings/:id", (req, res) => {
 // -------------------------------
 // Create Route - Sraddha Version
 // -------------------------------
-app.post("/listings", async (req, res, next) => {
-  try {
+app.post("/listings", wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
-  } catch (err) {
-    next(err);
-  }
-});
+}));
 
 // -------------------------------
 // Edit Route
