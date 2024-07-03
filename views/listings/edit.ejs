@@ -5,7 +5,7 @@
       class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-10 offset-1 border border-2 border-light-subtle my-4 rounded-4"
     >
       <h3 class="mt-4">Edit Listing</h3>
-      <form action="/listings/<%= listing._id %>?_method=PUT" method="post" class="my-4">
+      <form action="/listings/<%= listing._id %>?_method=PUT" method="post" class="my-4 needs-validation" novalidate>
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -15,7 +15,10 @@
             placeholder="Add a catchy title"
             class="form-control"
             value="<%= listing.title %>"
+            required
           />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please provide a good title</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
@@ -25,9 +28,12 @@
             class="form-control"
             id="description"
             rows="3"
+            required
           >
 <%= listing.description %></textarea
           >
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please provide a good description</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image URL</label>
@@ -38,7 +44,10 @@
             class="form-control"
             id="image"
             value="<%= listing.image %>"
+            required
           />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please provide a valid image URL</div>
         </div>
         <div class="row mb-3">
           <div class="col-md-6">
@@ -50,7 +59,10 @@
               class="form-control"
               id="price"
               value="<%= listing.price %>"
+              required
             />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please provide the price</div>
           </div>
           <div class="col-md-6">
             <label for="country" class="form-label">Country</label>
@@ -61,7 +73,10 @@
               class="form-control"
               id="country"
               value="<%= listing.country %>"
+              required
             />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please provide a valid country</div>
           </div>
         </div>
         <div class="mb-3">
@@ -73,7 +88,10 @@
             class="form-control"
             id="location"
             value="<%= listing.location %>"
+            required
           />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please provide a valid location.</div>
         </div>
         <button class="btn btn-danger px-4 rounded-pill">Submit</button>
       </form>
