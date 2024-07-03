@@ -5,7 +5,12 @@
       class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-10 offset-1 border border-2 border-light-subtle my-4 rounded-4"
     >
       <h3 class="mt-4">Create a New Listing</h3>
-      <form action="/listings" method="post" class="my-4">
+      <form
+        action="/listings"
+        method="post"
+        class="my-4 needs-validation"
+        novalidate
+      >
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -14,7 +19,10 @@
             id="title"
             placeholder="Add a catchy title"
             class="form-control"
+            required
           />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please provide a title.</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
@@ -24,7 +32,10 @@
             class="form-control"
             id="description"
             rows="3"
+            required
           ></textarea>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please provide a description.</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image URL</label>
@@ -35,6 +46,8 @@
             class="form-control"
             id="image"
           />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Invalid</div>
         </div>
         <div class="row mb-3">
           <div class="col-md-6">
@@ -45,7 +58,10 @@
               placeholder="Enter Price"
               class="form-control"
               id="price"
+              required
             />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please choose a valid price.</div>
           </div>
           <div class="col-md-6">
             <label for="country" class="form-label">Country</label>
@@ -55,7 +71,10 @@
               placeholder="Enter Country"
               class="form-control"
               id="country"
+              required
             />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please provide a country.</div>
           </div>
         </div>
         <div class="mb-3">
@@ -66,7 +85,10 @@
             placeholder="Enter Location"
             class="form-control"
             id="location"
+            required
           />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please provide a valid location.</div>
         </div>
 
         <button class="btn btn-danger px-4 rounded-pill">Add</button>

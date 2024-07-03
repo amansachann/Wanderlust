@@ -26,12 +26,15 @@ async function main() {
   await mongoose.connect(MONGO_URL);
 }
 
+// ----------------------------
+// Index Route
+// ----------------------------
 app.get("/", (req, res) => {
   res.redirect("/listings");
 });
 
 // ----------------------------
-// Index Route
+// Listings Route
 // ----------------------------
 app.get("/listings", (req, res) => {
   Listing.find({})
