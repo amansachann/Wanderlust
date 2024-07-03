@@ -6,7 +6,8 @@ const path = require("path");
 const Listing = require("./models/listing.js");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const wrapAsync = require("./utils/wrapAsync.js")
+const wrapAsync = require("./utils/wrapAsync.js");
+const ExpressError = require("./utils/ExpressError.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -55,16 +56,22 @@ app.get("/listings/new", (req, res) => {
 // ----------------------------
 // Show Route
 // ----------------------------
-app.get("/listings/:id", (req, res) => {
-  const { id } = req.params;
-  Listing.findById(id)
-    .then((listing) => {
-      res.render("listings/show.ejs", { listing });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// app.get("/listings/:id", (req, res) => {
+//   const { id } = req.params;
+//   Listing.findById(id)
+//     .then((listing) => {
+//       res.render("listings/show.ejs", { listing });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+// New Version
+app.get("/listings/:id", wrapAsync(async(req, res)=>{
+  const {id} = req.params;
+  const listing = await Listing.findById(id);
+  res.render("listings/show.ejs", {listing});
+}))
 
 // ------------------------------
 // Create Route - Aman Version
@@ -87,84 +94,93 @@ app.get("/listings/:id", (req, res) => {
 // -------------------------------
 // Create Route - Sraddha Version
 // -------------------------------
-app.post("/listings", wrapAsync(async (req, res, next) => {
+app.post(
+  "/listings",
+  wrapAsync(async (req, res, next) => {
+    if(!req.body.listing) {
+      throw new ExpressError(400, "Send valid data for listing")
+    }
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
-}));
+  })
+);
 
 // -------------------------------
 // Edit Route
 // -------------------------------
-app.get("/listings/:id/edit", (req, res) => {
-  const { id } = req.params;
-  Listing.findById(id)
-    .then((listing) => {
-      res.render("listings/edit.ejs", { listing });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// app.get("/listings/:id/edit", (req, res) => {
+//   const { id } = req.params;
+//   Listing.findById(id)
+//     .then((listing) => {
+//       res.render("listings/edit.ejs", { listing });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
 // -------------------------------
 // Edit Route - Sraddha Version
 // -------------------------------
-// app.get("/listings/:id/edit", async (req, res) => {
-//   const { id } = req.params;
-//   const listing = await  Listing.findById(id);
-//   res.render("listings/edit.ejs", { listing });
-// });
+app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  const listing = await  Listing.findById(id);
+  res.render("listings/edit.ejs", { listing });
+}));
 
 // -------------------------------
 // Update Route
 // -------------------------------
-app.put("/listings/:id", (req, res) => {
-  const { id } = req.params;
-  Listing.findByIdAndUpdate(id, { ...req.body.listing })
-    .then(() => {
-      console.log("Listing Updated");
-      res.redirect(`/listings/${id}`);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// app.put("/listings/:id", (req, res) => {
+//   const { id } = req.params;
+//   Listing.findByIdAndUpdate(id, { ...req.body.listing })
+//     .then(() => {
+//       console.log("Listing Updated");
+//       res.redirect(`/listings/${id}`);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
 // -------------------------------
 // Update Route - Sraddha Version
 // -------------------------------
-// app.put("/listings/:id", async (req, res) => {
-//   const { id } = req.params;
-//   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-//   res.redirect(`/listings/${id}`);
-// });
+app.put("/listings/:id", wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  if(!req.body.listing) {
+    throw new ExpressError(400, "Send valid data for listing")
+  }
+  await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+  res.redirect(`/listings/${id}`);
+}));
 
 // -------------------------------
 // Delete Route
 // -------------------------------
-app.delete("/listings/:id", (req, res) => {
-  const { id } = req.params;
-  Listing.findByIdAndDelete(id)
-    .then((deletedListing) => {
-      console.log("Listing Deleted");
-      console.log(deletedListing);
-      res.redirect("/listings");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// app.delete("/listings/:id", (req, res) => {
+//   const { id } = req.params;
+//   Listing.findByIdAndDelete(id)
+//     .then((deletedListing) => {
+//       console.log("Listing Deleted");
+//       console.log(deletedListing);
+//       res.redirect("/listings");
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
 // -------------------------------
 // Delete Route - Sraddha Version
 // -------------------------------
-// app.delete("/listings/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const deletedListing = await Listing.findByIdAndDelete(id);
-//   console.log(deletedListing);
-//   res.redirect("/listings");
-// });
+app.delete("/listings/:id", wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  const deletedListing = await Listing.findByIdAndDelete(id);
+  console.log(deletedListing);
+  res.redirect("/listings");
+}));
 
 // ----------------------------
 // Just for Testing Purpose
@@ -186,10 +202,18 @@ app.delete("/listings/:id", (req, res) => {
 // });
 
 // -------------------------------
+// Page Not Found
+// -------------------------------
+app.all("*", (req, res, next)=>{
+  next(new ExpressError(404, "Page Not Found!"));
+})
+
+// -------------------------------
 // Error Handling Middleware
 // -------------------------------
 app.use((err, req, res, next) => {
-  res.send("something went wrong");
+  let {statusCode=500, message="Something went wrong!"} = err;
+  res.status(statusCode).send(message);
 });
 
 app.listen(port, () => {
