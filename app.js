@@ -68,29 +68,33 @@ app.get("/listings/:id", (req, res) => {
 // ------------------------------
 // Create Route - Aman Version
 // ------------------------------
-app.post("/listings", (req, res) => {
-  const listing = req.body.listing;
-  const newListing = new Listing(listing);
-  newListing
-    .save()
-    .then((result) => {
-      console.log("New Listing Added");
-      console.log(result);
-      res.redirect("/listings");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// app.post("/listings", (req, res) => {
+//   const listing = req.body.listing;
+//   const newListing = new Listing(listing);
+//   newListing
+//     .save()
+//     .then((result) => {
+//       console.log("New Listing Added");
+//       console.log(result);
+//       res.redirect("/listings");
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
 // -------------------------------
 // Create Route - Sraddha Version
 // -------------------------------
-// app.post("/listings", async (req, res) => {
-//   const newListing = new Listing(req.body.listing);
-//   await newListing.save();
-//   res.redirect("/listings");
-// });
+app.post("/listings", async (req, res, next) => {
+  try {
+    const newListing = new Listing(req.body.listing);
+    await newListing.save();
+    res.redirect("/listings");
+  } catch (err) {
+    next(err);
+  }
+});
 
 // -------------------------------
 // Edit Route
@@ -183,6 +187,13 @@ app.delete("/listings/:id", (req, res) => {
 //     res.send("Successful testing");
 //   });
 // });
+
+// -------------------------------
+// Error Handling Middleware
+// -------------------------------
+app.use((err, req, res, next) => {
+  res.send("something went wrong");
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
