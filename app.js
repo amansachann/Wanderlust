@@ -8,7 +8,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const {listingSchema} = require("./schema.js");
+const { listingSchema } = require("./schema.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -28,6 +28,19 @@ main()
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
+
+// ---------------------------------
+// Schema Validation Middleware 
+// ---------------------------------
+const validateListing = (req, res, next) => {
+  let { error } = listingSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el=>el.message)).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
 
 // ----------------------------
 // Index Route
@@ -68,11 +81,14 @@ app.get("/listings/new", (req, res) => {
 //     });
 // });
 // New Version
-app.get("/listings/:id", wrapAsync(async(req, res)=>{
-  const {id} = req.params;
-  const listing = await Listing.findById(id);
-  res.render("listings/show.ejs", {listing});
-}))
+app.get(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+    res.render("listings/show.ejs", { listing });
+  })
+);
 
 // ------------------------------
 // Create Route - Aman Version
@@ -97,12 +113,8 @@ app.get("/listings/:id", wrapAsync(async(req, res)=>{
 // -------------------------------
 app.post(
   "/listings",
+  validateListing,
   wrapAsync(async (req, res, next) => {
-    let result = listingSchema.validate(req.body);
-    console.log(result);
-    if(result.error) {
-      throw new ExpressError(400, result.error);
-    }
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
@@ -126,11 +138,15 @@ app.post(
 // -------------------------------
 // Edit Route - Sraddha Version
 // -------------------------------
-app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
-  const { id } = req.params;
-  const listing = await  Listing.findById(id);
-  res.render("listings/edit.ejs", { listing });
-}));
+app.get(
+  "/listings/:id/edit",
+
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+    res.render("listings/edit.ejs", { listing });
+  })
+);
 
 // -------------------------------
 // Update Route
@@ -150,14 +166,18 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 // -------------------------------
 // Update Route - Sraddha Version
 // -------------------------------
-app.put("/listings/:id", wrapAsync(async (req, res) => {
-  const { id } = req.params;
-  if(!req.body.listing) {
-    throw new ExpressError(400, "Send valid data for listing")
-  }
-  await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-  res.redirect(`/listings/${id}`);
-}));
+app.put(
+  "/listings/:id",
+  validateListing,
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    if (!req.body.listing) {
+      throw new ExpressError(400, "Send valid data for listing");
+    }
+    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    res.redirect(`/listings/${id}`);
+  })
+);
 
 // -------------------------------
 // Delete Route
@@ -178,12 +198,15 @@ app.put("/listings/:id", wrapAsync(async (req, res) => {
 // -------------------------------
 // Delete Route - Sraddha Version
 // -------------------------------
-app.delete("/listings/:id", wrapAsync(async (req, res) => {
-  const { id } = req.params;
-  const deletedListing = await Listing.findByIdAndDelete(id);
-  console.log(deletedListing);
-  res.redirect("/listings");
-}));
+app.delete(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    const deletedListing = await Listing.findByIdAndDelete(id);
+    console.log(deletedListing);
+    res.redirect("/listings");
+  })
+);
 
 // ----------------------------
 // Just for Testing Purpose
@@ -207,17 +230,17 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
 // -------------------------------
 // Page Not Found
 // -------------------------------
-app.all("*", (req, res, next)=>{
+app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
-})
+});
 
 // -------------------------------
 // Error Handling Middleware
 // -------------------------------
 app.use((err, req, res, next) => {
-  let {statusCode=500, message="Something went wrong!"} = err;
+  let { statusCode = 500, message = "Something went wrong!" } = err;
   // res.status(statusCode).send(message);
-  res.status(statusCode).render("error.ejs", {statusCode, message});
+  res.status(statusCode).render("error.ejs", { statusCode, message });
 });
 
 app.listen(port, () => {
