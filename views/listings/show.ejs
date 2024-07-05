@@ -5,7 +5,7 @@
       class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-10 offset-1"
     >
       <h3 class="mt-4 mb-3"><%= listing.title %></h3>
-      <div class="card">
+      <div class="listing-card">
         <img
           src="<%= listing.image %>"
           class="card-img-top"
@@ -42,17 +42,17 @@
           method="post"
           class="needs-validation"
           novalidate
-         >
+        >
           <div class="mb-3">
             <label for="rating" class="form-label">Rating</label>
             <input
               type="range"
               name="review[rating]"
               id="rating"
-              class="w-50 d-block"
+              class="w-50 d-block form-range"
               min="0"
               max="5"
-              step="1"
+              step="0.5"
             />
           </div>
           <div class="mb-3">
@@ -65,10 +65,32 @@
               rows="3"
               required
             ></textarea>
-            <div class="invalid-feedback">Please add some comments for review</div>
+            <div class="invalid-feedback">
+              Please add some comments for review
+            </div>
           </div>
           <button class="btn btn-outline-dark rounded-pill px-3">Submit</button>
         </form>
+        <hr />
+        <h4>All Reviews</h4>
+        <div class="row">
+            <% for(review of listing.reviews) { %>
+            <div class="border-bottom py-2 col-md-5 offset-md-1 col-12 offset-0 g-4">
+              <p class="m-0 p-0 fs-5"><strong>Unknown User</strong></p>
+              <p class="my-0 py-0">
+                <strong>Rating:</strong> <%= review.rating %> stars
+              </p>
+              <p class="my-0 py-0"><%= review.comment %></p>
+              <p
+                class="mt-1 mb-0 py-0 text-secondary fw-light"
+                style="font-size: 0.8rem"
+              >
+                <%= review.createdAt.toLocaleDateString() %>
+              </p>
+            </div>
+            <% } %>
+          
+        </div>
       </div>
     </div>
   </div>
