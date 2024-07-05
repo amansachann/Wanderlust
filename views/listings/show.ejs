@@ -37,31 +37,38 @@
       <hr />
       <div class="mb-4">
         <h4>Leave a Review</h4>
-      <form action="/listings/<%= listing._id %>/reviews" method="post">
-        <div class="mb-3">
-          <label for="rating" class="form-label">Rating</label>
-          <input
-            type="range"
-            name="review[rating]"
-            id="rating"
-            class="w-50 d-block"
-            min="0"
-            max="5"
-            step="1"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="comment" class="form-label">Comments</label>
-          <textarea
-            name="review[comment]"
-            id="comment"
-            placeholder="Comments"
-            class="form-control"
-            rows="3"
-          ></textarea>
-        </div>
-        <button class="btn btn-outline-dark rounded-pill px-3">Submit</button>
-      </form>
+        <form
+          action="/listings/<%= listing._id %>/reviews"
+          method="post"
+          class="needs-validation"
+          novalidate
+         >
+          <div class="mb-3">
+            <label for="rating" class="form-label">Rating</label>
+            <input
+              type="range"
+              name="review[rating]"
+              id="rating"
+              class="w-50 d-block"
+              min="0"
+              max="5"
+              step="1"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="comment" class="form-label">Comments</label>
+            <textarea
+              name="review[comment]"
+              id="comment"
+              placeholder="Comments"
+              class="form-control"
+              rows="3"
+              required
+            ></textarea>
+            <div class="invalid-feedback">Please add some comments for review</div>
+          </div>
+          <button class="btn btn-outline-dark rounded-pill px-3">Submit</button>
+        </form>
       </div>
     </div>
   </div>
