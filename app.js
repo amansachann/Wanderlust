@@ -70,17 +70,6 @@ app.get("/listings/new", (req, res) => {
 // ----------------------------
 // Show Route
 // ----------------------------
-// app.get("/listings/:id", (req, res) => {
-//   const { id } = req.params;
-//   Listing.findById(id)
-//     .then((listing) => {
-//       res.render("listings/show.ejs", { listing });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-// New Version
 app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
@@ -90,26 +79,8 @@ app.get(
   })
 );
 
-// ------------------------------
-// Create Route - Aman Version
-// ------------------------------
-// app.post("/listings", (req, res) => {
-//   const listing = req.body.listing;
-//   const newListing = new Listing(listing);
-//   newListing
-//     .save()
-//     .then((result) => {
-//       console.log("New Listing Added");
-//       console.log(result);
-//       res.redirect("/listings");
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-
 // -------------------------------
-// Create Route - Sraddha Version
+// Create Route
 // -------------------------------
 app.post(
   "/listings",
@@ -122,21 +93,7 @@ app.post(
 );
 
 // -------------------------------
-// Edit Route
-// -------------------------------
-// app.get("/listings/:id/edit", (req, res) => {
-//   const { id } = req.params;
-//   Listing.findById(id)
-//     .then((listing) => {
-//       res.render("listings/edit.ejs", { listing });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-
-// -------------------------------
-// Edit Route - Sraddha Version
+// Edit Route 
 // -------------------------------
 app.get(
   "/listings/:id/edit",
@@ -149,22 +106,7 @@ app.get(
 );
 
 // -------------------------------
-// Update Route
-// -------------------------------
-// app.put("/listings/:id", (req, res) => {
-//   const { id } = req.params;
-//   Listing.findByIdAndUpdate(id, { ...req.body.listing })
-//     .then(() => {
-//       console.log("Listing Updated");
-//       res.redirect(`/listings/${id}`);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-
-// -------------------------------
-// Update Route - Sraddha Version
+// Update Route 
 // -------------------------------
 app.put(
   "/listings/:id",
@@ -180,23 +122,7 @@ app.put(
 );
 
 // -------------------------------
-// Delete Route
-// -------------------------------
-// app.delete("/listings/:id", (req, res) => {
-//   const { id } = req.params;
-//   Listing.findByIdAndDelete(id)
-//     .then((deletedListing) => {
-//       console.log("Listing Deleted");
-//       console.log(deletedListing);
-//       res.redirect("/listings");
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
-
-// -------------------------------
-// Delete Route - Sraddha Version
+// Delete Route 
 // -------------------------------
 app.delete(
   "/listings/:id",

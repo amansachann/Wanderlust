@@ -4,7 +4,7 @@
     <div
       class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-10 offset-1"
     >
-      <h3 class="my-4">Listing Details</h3>
+      <h3 class="mt-4 mb-3"><%= listing.title %></h3>
       <div class="card">
         <img
           src="<%= listing.image %>"
@@ -12,8 +12,7 @@
           alt="listing-image"
         />
         <div class="card-body mt-1">
-          <h5 class="card-title my-1 fs-5"><%= listing.title %></h5>
-          <p class="card-text lh-base">
+          <p class="card-text lh-base my-2">
             <span class="d-block"><%= listing.description %></span>
             <span class="d-block"
               ><strong>Price: </strong>&#8377; <%=
